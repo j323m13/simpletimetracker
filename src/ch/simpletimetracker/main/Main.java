@@ -15,7 +15,7 @@ public class Main extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        //check user lang and country variable. pass the result to DBConnenction
+        //check user lang and country variable. pass the result to DBConnegit ction
         OSBasedAction helper = new OSBasedAction();
         helper.setLocalValue();
         /*
