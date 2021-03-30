@@ -1,5 +1,6 @@
 package ch.simpletimetracker.controllers;
 
+import ch.simpletimetracker.dao.DatabaseEntryDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +13,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class LoginViewController implements IController{
+    public String username = null;
+    public final String password = null;
+
     FXMLLoader loader = null;
     @FXML
     private Button saveButton;
@@ -51,7 +56,7 @@ public class LoginViewController implements IController{
     /**
      * Login action
      */
-    public void onLoginButton() throws IOException {
+    public void onLoginButton() throws IOException, SQLException, InterruptedException, ClassNotFoundException {
         //TODO test login:password validity
         checkLoginInformation(emailField.getText(),passwordField.getText());
         Stage stage = new Stage();
@@ -63,8 +68,18 @@ public class LoginViewController implements IController{
 
     }
 
-    private void checkLoginInformation(String email, String password) {
+    private void checkLoginInformation(String email, String password) throws SQLException, ClassNotFoundException, InterruptedException {
+        DatabaseEntryDao loginHelper = new DatabaseEntryDao();
+
+
         System.out.println(email+", "+password);
+        if(email!=null || password!=null){
+            loginHelper.setPasswordDBDAO(password);
+            loginHelper.setUserDAO(email);
+            loginHelper.setBootPasswordDAO(loginHelper.getUserDBDAO()+loginHelper.getPasswordDBDAO());
+            System.out.println(loginHelper.getUserDBDAO()+", "+loginHelper.getPasswordDBDAO()+", "+loginHelper.getBootPasswordDAO());
+            loginHelper.setupEncryption(loginHelper.getBootPasswordDAO());
+        }
     }
 
 

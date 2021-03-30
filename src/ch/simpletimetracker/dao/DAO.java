@@ -1,7 +1,7 @@
-package src.ch.simpletimetracker.dao;
+package ch.simpletimetracker.dao;
 
 
-import src.ch.simpletimetracker.databaseEntry.DatabaseEntry;
+import ch.simpletimetracker.databaseEntry.DatabaseEntry;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.List;
  * The interface for DAO pattern
  * @author Jérémie Equey
  */
-interface Dao {
+ interface Dao {
     default List<DatabaseEntry> getAll() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
         return null;
     }

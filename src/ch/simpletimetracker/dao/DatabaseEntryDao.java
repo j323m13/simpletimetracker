@@ -1,19 +1,19 @@
-package src.ch.simpletimetracker.dao;
+package ch.simpletimetracker.dao;
 
+import ch.simpletimetracker.databaseEntry.DatabaseEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import src.ch.simpletimetracker.databaseEntry.DatabaseEntry;
+import ch.simpletimetracker.connection.DBConnection;
 import src.ch.simpletimetracker.utils.OSBasedAction;
-
 
 import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.*;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-import src.ch.simpletimetracker.connection.DBConnection;
-import static src.ch.simpletimetracker.connection.DBConnection.*;
+import static ch.simpletimetracker.connection.DBConnection.*;
 
 
 
@@ -22,7 +22,7 @@ import static src.ch.simpletimetracker.connection.DBConnection.*;
  * This class is the pivot between the classes DBConnection and the controllers.
  * @author Jérémie Equey
  */
-public class DatabaseEntryDao implements Dao{
+public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
 
     /**
      * Methode to retrieve all the entries from the Database.
@@ -33,7 +33,7 @@ public class DatabaseEntryDao implements Dao{
      */
     @Override
     public ObservableList<DatabaseEntry> getAll() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
-        String getAll = "SELECT * FROM \"CERBYTES\".\"database_entries\"";
+        String getAll = "SELECT * FROM \"SIMPLETIMETRACKER\".\"database_entries\"";
         ObservableList<DatabaseEntry> databaseEntries = FXCollections.observableArrayList();
         dbExecuteQueryDAO(getAll, databaseEntries, DBConnection.createURLSimple());
         return databaseEntries;
@@ -55,12 +55,10 @@ public class DatabaseEntryDao implements Dao{
         //we iterate through the results and save them into databaseEntry objects. then all of them are saved into the ObservableList.
         while (result.next()) {
             DatabaseEntry entry = new DatabaseEntry();
-            entry.setDummytId(String.valueOf(i));
+            entry.setDummyId(String.valueOf(i));
             entry.setId(result.getString("user_id"));
             entry.setUsername(result.getString("username"));
-            entry.setDescription(result.getString("description"));
-            entry.setPassword(result.getString("password_text"));
-            entry.setUrl(result.getString("url_content"));
+            entry.setTime(result.getString("description"));
             entry.setCreationDate(result.getString("date_creation"));
             entry.setLastUpdate(result.getString("date_update"));
             Clob note = result.getClob("note");
@@ -93,12 +91,12 @@ public class DatabaseEntryDao implements Dao{
      */
     @Override
     public void save(DatabaseEntry entry) throws SQLException, ClassNotFoundException, InterruptedException {
-        System.out.println(entry.getUsername()+", "+entry.getDescription()+", "+
-                entry.getPassword()+", "+ entry.getCreationDate()+", "+entry.getLastUpdate()+", "+entry.getUrl());
+        System.out.println(entry.getUsername()+", "+entry.getTime()+", "+
+                entry.getCreationDate()+", "+entry.getLastUpdate());
 
-        String saveStmt = "INSERT INTO \"CERBYTES\".\"database_entries\"\n" +
+        String saveStmt = "INSERT INTO \"SIMPLETIMETRACKER\".\"database_entries\"\n" +
                 "(\"username\", \"description\", \"url_content\", \"password_text\", \"date_creation\", \"date_update\", \"note\" )\n" +
-                "VALUES('"+entry.getUsername()+"','"+entry.getDescription()+"','"+entry.getUrl()+"','"+entry.getPassword()+"','"+entry.getCreationDate()+"', '"+entry.getLastUpdate()+"','"+entry.getNote()+"')";
+                "VALUES('"+entry.getUsername()+"','"+entry.getTime()+"','"+entry.getCreationDate()+"', '"+entry.getLastUpdate()+"','"+entry.getNote()+"')";
 
         try {
             System.out.println("SAVE -> -> -> ");
@@ -120,10 +118,10 @@ public class DatabaseEntryDao implements Dao{
      * @throws ClassNotFoundException if the table or the schema are not set, an error is raised.
      */
     @Override
+    //TODO upate logic here (update)
     public void update(DatabaseEntry entry) throws SQLException, ClassNotFoundException {
-        String updateStmt = "UPDATE \"CERBYTES\".\"database_entries\"\n" +
-                "SET \"username\"='"+entry.getUsername()+"', \"description\"='"+entry.getDescription()+"'," +
-                "\"url_content\"='"+entry.getUrl()+"', \"password_text\"='"+entry.getPassword()+"', \"date_update\"='"+entry.getLastUpdate()+"'," +
+        String updateStmt = "UPDATE \"SIMPLETIMETRACKER\".\"database_entries\"\n" +
+                "SET \"username\"='"+entry.getUsername()+"', \"time\"='"+entry.getTime()+"',\"date_update\"='"+entry.getLastUpdate()+"'," +"',\"categroy\"='"+entry.getCategory()+"',"+
                 "\"note\"='"+entry.getNote()+"' WHERE \"user_id\"="+Integer.parseInt(entry.getId())+" ";
         try {
             dbExecuteUpdate(updateStmt,createURLSimple());
@@ -142,7 +140,7 @@ public class DatabaseEntryDao implements Dao{
      */
     @Override
     public void delete(DatabaseEntry entry) throws SQLException, ClassNotFoundException {
-        String deleteStmt = "DELETE FROM \"CERBYTES\".\"database_entries\"\n" +
+        String deleteStmt = "DELETE FROM \"SIMPLETIMETRACKER\".\"database_entries\"\n" +
                 "WHERE \"date_creation\"='"+entry.getCreationDate()+"'";
         try {
             dbExecuteUpdate(deleteStmt,createURLSimple());
@@ -163,7 +161,7 @@ public class DatabaseEntryDao implements Dao{
      */
     public void deleteAccount() throws SQLException, InterruptedException {
         System.out.print("account will be deleted");
-        String deleteAccountStmt = "DELETE FROM \"CERBYTES\".\"database_entries\"";
+        String deleteAccountStmt = "DELETE FROM \"SIMPLETIMETRACKER\".\"database_entries\"";
         OSBasedAction handler = new OSBasedAction();
         try {
             //delete db table
@@ -208,6 +206,7 @@ public class DatabaseEntryDao implements Dao{
      */
     @Override
     public void connect() throws SQLException {
+        System.out.println(createURL());
         dbConnect(createURL());
     }
 
@@ -266,7 +265,7 @@ public class DatabaseEntryDao implements Dao{
     /**
      * change the bootpassword of the db. it is the encryption key.
      * @param newBootPassword a new Bootpassword (encryption key)
-     * @param newPasswordDB a new Password for the database user (cerbytes)
+     * @param newPasswordDB a new Password for the database user (SIMPLETIMETRACKER)
      * @throws SQLException if an error occur during this process, an SQL exception is raised.
      */
     public void changeBootPassword(String newBootPassword, String newPasswordDB) throws SQLException {
@@ -299,21 +298,20 @@ public class DatabaseEntryDao implements Dao{
 
     /**
      * Methode to setup the table in the database
-     * Setup schema (CERBYTES)
+     * Setup schema (SIMPLETIMETRACKER)
      * setup table (database_entries)
      * @throws SQLException if the schema or the table are already created, an exception is raised.
      */
     public void setupTable() throws SQLException {
         String urlForSetupSchemaAndTable = createURLSimple()+";password="+getPasswordDBDAO();
-        String slqCreateSchema = "CREATE SCHEMA \"CERBYTES\"";
-        String sqlCreateTable = "CREATE TABLE \"CERBYTES\".\"database_entries\" (\n" +
+        String slqCreateSchema = "CREATE SCHEMA \"SIMPLETIMETRACKER\"";
+        String sqlCreateTable = "CREATE TABLE \"SIMPLETIMETRACKER\".\"database_entries\" (\n" +
                 "                        \"user_id\" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY(Start with 1, Increment by 1),\n" +
                 "                        \"username\" VARCHAR(80) DEFAULT NULL,\n" +
-                "                        \"description\" VARCHAR(25) DEFAULT NULL,\n" +
-                "                        \"url_content\" VARCHAR(255) DEFAULT NULL,\n" +
-                "                        \"password_text\" VARCHAR(100) DEFAULT NULL,\n" +
+                "                        \"time\" VARCHAR(25) DEFAULT NULL,\n" +
                 "                        \"date_creation\" VARCHAR(50) DEFAULT NULL,\n" +
                 "                        \"date_update\" VARCHAR(50) DEFAULT NULL,\n" +
+                "                        \"category\" VARCHAR(50) DEFAULT NULL,\n" +
                 "                       \"note\" CLOB(2K) DEFAULT NULL)";
 
         //create the database schema
@@ -345,11 +343,13 @@ public class DatabaseEntryDao implements Dao{
     public ObservableList<DatabaseEntry> searchElement(String searched, ObservableList<DatabaseEntry> databaseEntries){
         //ObservableList<DatabaseEntry> searchResults = FXCollections.observableArrayList();
         String element = "SELECT \"user_id\",\"username\",\"description\",\"url_content\",\"password_text\",\"date_creation\",\"date_update\",\"note\"\n" +
-                "FROM \"CERBYTES\".\"database_entries\"\n" +
+                "FROM \"SIMPLETIMETRACKER\".\"database_entries\"\n" +
                 "WHERE \"username\" LIKE '%"+searched+"%'\n" +
-                "OR \"description\" LIKE '%"+searched+"%'\n" +
-                "OR \"url_content\" LIKE '%"+searched+"%'\n" +
-                "OR \"note\" LIKE '%"+searched+"%'";
+                "OR \"date_creation\" LIKE '%"+searched+"%'\n" +
+                "OR \"last_update\" LIKE '%"+searched+"%'\n" +
+                "OR \"time\" LIKE '%"+searched+"%'\n" +
+                "OR \"note\" LIKE '%"+searched+"%'"+
+                "OR \"category\" LIKE '%"+searched+"%'";
         System.out.println(element);
         try {
             dbExecuteQueryDAO(element,databaseEntries,createURLSimple());
@@ -438,8 +438,13 @@ public class DatabaseEntryDao implements Dao{
     public String getDatabaseNameDAO(){ return getDatabaseName();}
 
 
+    public void setUserDAO(String email) {
+        setUserDB(email);
+    }
 
-
+    public String getUserDBDAO() {
+        return getUserDB();
+    }
 }
 
 

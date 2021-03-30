@@ -1,5 +1,7 @@
 package ch.simpletimetracker.controllers;
 
+import ch.simpletimetracker.dao.DatabaseEntryDao;
+import ch.simpletimetracker.databaseEntry.DatabaseEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -100,10 +102,21 @@ public class MainViewController implements IController{
     public void onSaveStop(ActionEvent actionEvent) {
         String date = null;
         String time = null;
-        date = dateTimeField.getText(0,9);
-        time = dateTimeField.getText(11,18);
+        String category = null;
+        String remarks = null;
+        date = dateTimeField.getText(0,10);
+        time = dateTimeField.getText(11,19);
+        category = categoryCombo.getValue();
+        remarks = textAreaRemarks.getText();
 
-        System.out.println(date+"--"+time+"--"+categoryCombo.getValue()+"--"+textAreaRemarks.getText());
+        System.out.println(date+"--"+time+"--"+category+"--"+remarks);
+
+        DatabaseEntryDao save = new DatabaseEntryDao();
+        DatabaseEntry entry = new DatabaseEntry();
+        entry.setCreationDate(date);
+        entry.setTime(time);
+        entry.setCategory(category);
+        entry.setNote(remarks);
     }
 
 

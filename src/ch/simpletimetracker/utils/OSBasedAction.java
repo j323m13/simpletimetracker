@@ -1,7 +1,7 @@
 package src.ch.simpletimetracker.utils;
 
-import src.ch.simpletimetracker.dao.DatabaseEntryDao;
-import src.ch.simpletimetracker.databaseEntry.DatabaseEntry;
+import ch.simpletimetracker.dao.DatabaseEntryDao;
+import ch.simpletimetracker.databaseEntry.DatabaseEntry;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,11 +99,7 @@ public class OSBasedAction {
         System.out.print(", ");
         System.out.print(object.getUsername());
         System.out.print(", ");
-        System.out.print(object.getDescription());
-        System.out.print(", ");
-        System.out.print(object.getPassword());
-        System.out.print(", ");
-        System.out.print(object.getUrl());
+        System.out.print(object.getTime());
         System.out.print(", ");
         System.out.print(object.getCreationDate());
         System.out.print(", ");

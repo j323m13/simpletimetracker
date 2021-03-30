@@ -1,6 +1,8 @@
 package src.ch.simpletimetracker.main;
 
 
+import ch.simpletimetracker.main.Main;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -9,6 +11,6 @@ import java.sql.SQLException;
  */
 public class MainApp {
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-        src.ch.simpletimetracker.main.Main.main(args);
+        Main.main(args);
     }
 }

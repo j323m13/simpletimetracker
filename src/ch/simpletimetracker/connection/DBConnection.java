@@ -1,4 +1,4 @@
-package src.ch.simpletimetracker.connection;
+package ch.simpletimetracker.connection;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
@@ -9,13 +9,13 @@ import java.util.concurrent.TimeUnit;
  * @author Jérémie Equey
  */
 public class DBConnection {
-    private static final String userDB = "cerbytes";
+    private static String userDB = "simpletimetracker";
     private static String passwordDB;
     private static String bootPassword;
     private static final int encryptionKeyLength = 256;
     private static final String encryptionAlgorithm = "AES/CBC/NoPadding";
-    private static String databaseName = "db/cerbytes";
-    private static final Boolean databaseEncryption = true;
+    private static String databaseName = "db/simpletimetracker";
+    private static final Boolean databaseEncryption = false;
     private static final boolean createDB = true;
     private static String JDBC_URL;
     public static Connection connection = null;
@@ -29,6 +29,7 @@ public class DBConnection {
     public static void dbConnect(String JDBC_URL) throws SQLException {
         System.out.println("Connecting to db ... ");
         try {
+            System.out.print(JDBC_URL);
             connection = DriverManager.getConnection(JDBC_URL);
             System.out.println("connection successful");
         }catch (SQLException connect){
@@ -264,6 +265,8 @@ public class DBConnection {
 
     public static void setDatabaseName(String databaseNameString){ databaseName = databaseNameString; }
 
+    public static void setUserDB(String username){ userDB = username;};
+
     public static String getPasswordDB(){
         return passwordDB;
     }
@@ -279,6 +282,8 @@ public class DBConnection {
     public static Connection getConnection(){ return connection;}
 
     public static String getLocalValues(){ return localValues;}
+
+    public static String getUserDB(){ return userDB;};
 
 
 }
