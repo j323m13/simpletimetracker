@@ -57,13 +57,13 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="371.0" prefWidth="557.0" VBox.vgrow="ALWAYS">
          <children>
-            <TableView layoutY="215.0" prefHeight="156.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="215.0">
+            <TableView fx:id="profileTable" editable="true" layoutY="215.0" prefHeight="156.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="215.0">
               <columns>
-                <TableColumn fx:id="id" prefWidth="39.0" text="id" />
-                <TableColumn fx:id="date" prefWidth="135.0" text="Date" />
-                  <TableColumn fx:id="time" prefWidth="116.0" text="Time" />
-                  <TableColumn fx:id="category" prefWidth="151.0" text="Category" />
-                  <TableColumn fx:id="remarks" prefWidth="198.0" text="Remarks" />
+                <TableColumn fx:id="idColumn" prefWidth="39.0" text="id" />
+                <TableColumn fx:id="dateColumn" prefWidth="135.0" text="Date" />
+                  <TableColumn fx:id="timeColumn" prefWidth="116.0" text="Time" />
+                  <TableColumn fx:id="categoryColumn" prefWidth="151.0" text="Category" />
+                  <TableColumn fx:id="noteColumn" prefWidth="198.0" text="Remarks" />
               </columns>
             </TableView>
             <Button id="start_stop_button" fx:id="start_stop" layoutX="275.0" layoutY="153.0" mnemonicParsing="false" text="start / Stop" onAction="#onSaveStop" />

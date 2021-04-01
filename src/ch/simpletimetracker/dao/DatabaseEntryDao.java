@@ -4,7 +4,7 @@ import ch.simpletimetracker.databaseEntry.DatabaseEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ch.simpletimetracker.connection.DBConnection;
-import src.ch.simpletimetracker.utils.OSBasedAction;
+import ch.simpletimetracker.utils.OSBasedAction;
 
 import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
@@ -57,10 +57,9 @@ public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
             DatabaseEntry entry = new DatabaseEntry();
             entry.setDummyId(String.valueOf(i));
             entry.setId(result.getString("user_id"));
-            entry.setUsername(result.getString("username"));
-            entry.setTime(result.getString("description"));
             entry.setCreationDate(result.getString("date_creation"));
-            entry.setLastUpdate(result.getString("date_update"));
+            entry.setTime(result.getString("time"));
+            entry.setCategory(result.getString("category"));
             Clob note = result.getClob("note");
             //we transform the Clob data into a string.
             Reader r = note.getCharacterStream();
@@ -76,7 +75,8 @@ public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
             helper.printDatabaseEntryObject(entry);
 
         }
-        //System.out.println("size :" +databaseEntries.size());
+        System.out.println("size :" +databaseEntries.size());
+
         return databaseEntries;
     }
 
@@ -91,12 +91,12 @@ public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
      */
     @Override
     public void save(DatabaseEntry entry) throws SQLException, ClassNotFoundException, InterruptedException {
-        System.out.println(entry.getUsername()+", "+entry.getTime()+", "+
-                entry.getCreationDate()+", "+entry.getLastUpdate());
+        System.out.println(entry.getTime()+", "+
+                entry.getCreationDate()+", "+entry.getCategory()+", "+entry.getNote());
 
         String saveStmt = "INSERT INTO \"SIMPLETIMETRACKER\".\"database_entries\"\n" +
-                "(\"username\", \"description\", \"url_content\", \"password_text\", \"date_creation\", \"date_update\", \"note\" )\n" +
-                "VALUES('"+entry.getUsername()+"','"+entry.getTime()+"','"+entry.getCreationDate()+"', '"+entry.getLastUpdate()+"','"+entry.getNote()+"')";
+                "(\"date_creation\", \"time\", \"category\", \"note\" )\n" +
+                "VALUES('"+entry.getCreationDate()+"','"+entry.getTime()+"','"+entry.getCategory()+"','"+entry.getNote()+"')";
 
         try {
             System.out.println("SAVE -> -> -> ");
@@ -108,7 +108,6 @@ public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
         }
 
     }
-
 
 
     /**

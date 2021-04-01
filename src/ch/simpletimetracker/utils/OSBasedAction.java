@@ -1,4 +1,4 @@
-package src.ch.simpletimetracker.utils;
+package ch.simpletimetracker.utils;
 
 import ch.simpletimetracker.dao.DatabaseEntryDao;
 import ch.simpletimetracker.databaseEntry.DatabaseEntry;
@@ -97,13 +97,11 @@ public class OSBasedAction {
         System.out.print(", ");
         System.out.print(object.getDummyId());
         System.out.print(", ");
-        System.out.print(object.getUsername());
+        System.out.print(object.getCreationDate());
         System.out.print(", ");
         System.out.print(object.getTime());
         System.out.print(", ");
-        System.out.print(object.getCreationDate());
-        System.out.print(", ");
-        System.out.print(object.getLastUpdate());
+        System.out.print(object.getCategory());
         System.out.print(", ");
         System.out.print(object.getNote()+"\n");
     }

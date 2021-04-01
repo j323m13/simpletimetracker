@@ -2,7 +2,7 @@ package ch.simpletimetracker.main;
 
 
 import ch.simpletimetracker.controllers.LoginViewController;
-import src.ch.simpletimetracker.utils.OSBasedAction;
+import ch.simpletimetracker.utils.OSBasedAction;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
