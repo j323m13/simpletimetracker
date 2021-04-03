@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -104,5 +107,33 @@ public class OSBasedAction {
         System.out.print(object.getCategory());
         System.out.print(", ");
         System.out.print(object.getNote()+"\n");
+    }
+
+    /**
+     * Get Date and time
+     */
+    public String getDateAndTime(){
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formaterForDateTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate = dateTime.format(formaterForDateTime);
+        return formattedDate;
+    }
+
+    public String getDate(){
+        String date = getDateAndTime();
+        String[] strings = date.split(" ");
+        date = null;
+        date = strings[0];
+        return date;
+
+    }
+
+    public String getTime(){
+        String time = getDateAndTime();
+        String[] strings = time.split(" ");
+        time = null;
+        time = strings[0];
+        return time;
+
     }
 }

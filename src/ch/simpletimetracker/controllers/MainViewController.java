@@ -40,6 +40,7 @@ public class MainViewController implements IController{
     @FXML private TableColumn<DatabaseEntry, String> noteColumn;
     DatabaseEntryDao mainViewHelper = new DatabaseEntryDao();
     @FXML private final ObservableList<DatabaseEntry> databaseEntries = FXCollections.observableArrayList();
+    OSBasedAction dateHelper = new OSBasedAction();
 
 
 
@@ -63,7 +64,7 @@ public class MainViewController implements IController{
 
     private void loadDatabaseEntries(ObservableList<DatabaseEntry> databaseEntries) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
         idColumn.setCellValueFactory(
-                new PropertyValueFactory<>("id")
+                new PropertyValueFactory<>("dummyId")
         );
         dateColumn.setCellValueFactory(
                 new PropertyValueFactory<>("creationDate")
@@ -96,7 +97,7 @@ public class MainViewController implements IController{
 
 
     private void setDateTime(){
-        dateTimeField.setText(getDateAndTime());
+        dateTimeField.setText(dateHelper.getDateAndTime());
     }
 
 
@@ -119,13 +120,6 @@ public class MainViewController implements IController{
     }
 
 
-
-    public String getDateAndTime(){
-        LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter formaterForDateTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formattedDate = dateTime.format(formaterForDateTime);
-        return formattedDate;
-    }
 
     /**
      * This method provides the loader and the stage

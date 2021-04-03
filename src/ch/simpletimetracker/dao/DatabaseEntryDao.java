@@ -23,6 +23,7 @@ import static ch.simpletimetracker.connection.DBConnection.*;
  * @author Jérémie Equey
  */
 public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
+    OSBasedAction dateHelper = new OSBasedAction();
 
     /**
      * Methode to retrieve all the entries from the Database.
@@ -33,7 +34,7 @@ public class DatabaseEntryDao implements ch.simpletimetracker.dao.Dao {
      */
     @Override
     public ObservableList<DatabaseEntry> getAll() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
-        String getAll = "SELECT * FROM \"SIMPLETIMETRACKER\".\"database_entries\"";
+        String getAll = "SELECT * FROM \"SIMPLETIMETRACKER\".\"database_entries\" WHERE \"date_creation\"='"+dateHelper.getDate()+ "' ";
         ObservableList<DatabaseEntry> databaseEntries = FXCollections.observableArrayList();
         dbExecuteQueryDAO(getAll, databaseEntries, DBConnection.createURLSimple());
         return databaseEntries;
